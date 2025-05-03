@@ -11,7 +11,6 @@
 #define TAILLE2 5
 
 
-// src/grid.c
 
 
 typedef struct {
@@ -35,32 +34,56 @@ void affichage(int tab[TAILLE][TAILLE], int taille) {
         printf("|\n");
     }
 }
+void sleep_custom(unsigned int ms) {
+  clock_t debut_temps = clock();
+  clock_t fin_temps = ms * CLOCKS_PER_SEC / 1000 + debut_temps;
+
+  while (clock() < fin_temps);
+}
 
 int placer(int tab[TAILLE][TAILLE], int piece[TAILLE2][TAILLE2], int col) {
-    for (int i = 0; i <= TAILLE - TAILLE2; i++) {
-        int can_place = 1;
-        for (int j = 0; j < TAILLE2 && can_place; j++) {
-            for (int k = 0; k < TAILLE2 && can_place; k++) {
-                if (piece[j][k]) {
-                    if (col + k >= TAILLE || tab[i + j][col + k]) {
-                        can_place = 0;
+    int ligne;
+    
+    
+    int ligne_possible = -1;
+
+    for (int i = 0; i <=TAILLE2; i++) {
+        int peut_placer = 1;
+
+        for (int j = 0; j < TAILLE2 && peut_placer; j++) {
+            for (int k = 2; k < TAILLE2 && peut_placer; k++) {
+                if (piece[j][k] == 1) {  // 🔸 on ignore les zéros
+                    int x = i + j;
+                    int y = col + k;
+                    if (y >= TAILLE || x >= TAILLE || tab[x][y]) {
+                        peut_placer = 0;
                     }
                 }
             }
         }
-        if (can_place) {
-            for (int j = 0; j < TAILLE2; j++) {
-                for (int k = 0; k < TAILLE2; k++) {
-                    if (piece[j][k]) {
-                        tab[i + j][col + k] = 1;
-                    }
-                }
-            }
-            return 1;
+
+        if (peut_placer) {
+            ligne_possible = i;
+        } else {
+            break;
         }
     }
+
+    if (ligne_possible != -1) {
+        for (int j = 0; j < TAILLE2; j++) {
+            for (int k = 0; k < TAILLE2; k++) {
+                if (piece[j][k] == 1) {
+                    tab[ligne_possible + j][col + k] = 1;
+                }
+            }
+        }
+        return 1;
+    }
+
     return 0;
 }
+
+
 
 int vider_ligne_remplies(int tab[TAILLE][TAILLE]) {
     int efface = 0;
@@ -85,7 +108,6 @@ int vider_ligne_remplies(int tab[TAILLE][TAILLE]) {
     return efface;
 }
 
-// src/pieces.c
 
 
 void affiche_piece(int piece[TAILLE2][TAILLE2]) {
@@ -111,7 +133,7 @@ void rotation_piece(int piece[TAILLE2][TAILLE2], int degre) {
     }
 }
 
-int load_piece_from_file(const char *filename, int piece[TAILLE2][TAILLE2]) {
+int telecharge_piece(const char *filename, int piece[TAILLE2][TAILLE2]) {
     FILE *f = fopen(filename, "r");
     if (!f) return 0;
 
@@ -132,7 +154,7 @@ int load_piece_from_file(const char *filename, int piece[TAILLE2][TAILLE2]) {
     return 1;
 }
 
-int load_user_piece(int piece[TAILLE2][TAILLE2], char **piece_files, int nb_pieces) {
+int telecharge_piece_joueur(int piece[TAILLE2][TAILLE2], char **piece_files, int nb_pieces) {
     printf("Choisissez une pièce parmi les suivantes :\n");
     for (int i = 0; i < nb_pieces; i++) {
         printf("%d. %s\n", i + 1, piece_files[i]);
@@ -143,7 +165,7 @@ int load_user_piece(int piece[TAILLE2][TAILLE2], char **piece_files, int nb_piec
 
     char path[256];
     snprintf(path, sizeof(path), "pieces/%s", piece_files[choice - 1]);
-    return load_piece_from_file(path, piece);
+    return telecharge_piece(path, piece);
 }
 
 
@@ -151,14 +173,14 @@ int load_user_piece(int piece[TAILLE2][TAILLE2], char **piece_files, int nb_piec
 
 
 
-void save_score(const char *name, int score) {
+void sauvegarde_score(const char *name, int score) {
     FILE *f = fopen("scores.txt", "a");
     if (!f) return;
     fprintf(f, "%s %d\n", name, score);
     fclose(f);
 }
 
-void show_high_scores() {
+void score_max() {
     Score scores[MAX_SCORES];
     int count = 0;
     FILE *f = fopen("scores.txt", "r");
@@ -169,13 +191,13 @@ void show_high_scores() {
     }
     fclose(f);
 
-    printf("\n--- High Scores ---\n");
+    printf("\n   score max:    \n");
     for (int i = 0; i < count; i++) {
         printf("%s : %d\n", scores[i].name, scores[i].score);
     }
 }
 
-void start_game() {
+void Partie() {
     int tab[TAILLE][TAILLE];
     int piece[TAILLE2][TAILLE2];
     int score = 0;
@@ -211,11 +233,14 @@ void start_game() {
     printf("%d pièces trouvées.\n", nb_pieces);
 
     while (!game_over) {
-        if (!load_user_piece(piece, piece_files, nb_pieces)) {
+        if (!telecharge_piece_joueur(piece, piece_files, nb_pieces)) {
             printf("Erreur lors du chargement de la pièce.\n");
             break;
         }
-
+        char name[50];
+        printf("Entrez votre nom : ");
+        scanf("%s", name);
+       
         affichage(tab, TAILLE);
         printf("\nVoici la pièce à jouer :\n");
         affiche_piece(piece);
@@ -224,8 +249,22 @@ void start_game() {
         printf("Colonne (0 à %d) : ", TAILLE - 1);
         if (scanf("%d", &col) != 1) break;
 
-        printf("Orientation (0, 90, 180, 270) : ");
-        if (scanf("%d", &rotation) != 1) break;
+        int piece_temp[TAILLE2][TAILLE2];
+
+        for (int angle = 0; angle < 360; angle += 90) {
+            // Copier la pièce d'origine
+            memcpy(piece_temp, piece, sizeof(piece_temp));
+            rotation_piece(piece_temp, angle);
+
+            printf("\nRotation %d°:\n", angle);
+            affiche_piece(piece_temp);
+        }
+
+        printf("Choisissez l'orientation (0, 90, 180, 270) : ");
+        if (scanf("%d", &rotation) != 1 || (rotation % 90 != 0)) {
+            printf("Orientation invalide.\n");
+            break;
+        }
 
         rotation_piece(piece, rotation);
 
@@ -234,23 +273,22 @@ void start_game() {
             game_over = 1;
             break;
         }
+        affichage(tab, TAILLE);
 
+        
         int lignes_effacees = vider_ligne_remplies(tab);
         score += lignes_effacees;
 
         printf("Score actuel : %d\n", score);
-    }
+        sauvegarde_score(name, score);
+        score_max();
 
-    char name[50];
-    printf("Entrez votre nom : ");
-    scanf("%s", name);
-    save_score(name, score);
-    show_high_scores();
+    }
 
     for (int i = 0; i < nb_pieces; i++) free(piece_files[i]);
 }
 
 int main(){
-  start_game();
+  Partie();
   return 0;
 }
