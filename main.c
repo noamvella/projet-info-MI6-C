@@ -52,7 +52,7 @@ int placer(int tab[TAILLE][TAILLE], int piece[TAILLE2][TAILLE2], int col) {
 
         for (int j = 0; j < TAILLE2 && peut_placer; j++) {
             for (int k = 2; k < TAILLE2 && peut_placer; k++) {
-                if (piece[j][k] == 1) {  // 🔸 on ignore les zéros
+                if (piece[j][k] == 1) { 
                     int x = i + j;
                     int y = col + k;
                     if (y >= TAILLE || x >= TAILLE || tab[x][y]) {
@@ -252,7 +252,6 @@ void Partie() {
         int piece_temp[TAILLE2][TAILLE2];
 
         for (int angle = 0; angle < 360; angle += 90) {
-            // Copier la pièce d'origine
             memcpy(piece_temp, piece, sizeof(piece_temp));
             rotation_piece(piece_temp, angle);
 
