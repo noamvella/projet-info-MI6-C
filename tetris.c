@@ -1,14 +1,10 @@
 #include <stdio.h>
-#include "tetris.h"
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
-#include <time.h>
 
 #include "piece.h"
 #include "score.h"
 #include "tetris.h"
-#include "piece.h"
 
 
 //Initialisation de la matrice
@@ -126,3 +122,4 @@ int vider_ligne_remplies(int tab[TAILLE][TAILLE]) {
     }
     return efface; // Retourne le nombre de lignes effacées
 }
+
