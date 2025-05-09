@@ -134,7 +134,6 @@ void Partie() {
 }
 
 
-
 int main(){
   Partie();
   return 0;
