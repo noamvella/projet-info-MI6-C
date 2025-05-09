@@ -1,11 +1,14 @@
 #include "tetris.h"
 #include "piece.h"
 #include "score.h"
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
 #include <time.h>
+
 
 void Partie() {
     int tab[TAILLE][TAILLE];
@@ -59,10 +62,21 @@ void Partie() {
         affichage(tab, TAILLE);
         printf("\nVoici la pièce à jouer :\n");
         affiche_piece(piece);
-        
+
+        //On va mettre un temps afin que si le joueur ne joue pas, la colonne et laa rotation soient choisies aléatoirement
+        time_t debut, fin;
+        int temps_ecoule = 0;
+
+        srand(time(NULL)); // Initialiser le générateur de nombres aléatoires
+
+        printf("Tu as 30 secondes pour choisir une colonne et une rotation.\n");
+
+        time(&debut); // Enregistre le temps de début
+
         // On demande à l'utilisateur de choisir une colonne
         int col, rotation;
-        printf("Colonne (0 à %d) : ", TAILLE - 1);
+
+        printf("Colonne (0 à %d) : ", TAILLE - 1); 
         if (scanf("%d", &col) != 1) break;
 
         int piece_temp[TAILLE2][TAILLE2];
@@ -82,7 +96,20 @@ void Partie() {
             break;
         }
 
-        rotation_piece(piece, rotation);
+
+        time(&fin); // Enregistre le temps de fin
+
+        temps_ecoule = difftime(fin, debut); // Calcule le temps écoulé
+        if (temps_ecoule > 30) {
+            printf("Temps écoulé !\n");
+            col = rand() % TAILLE; // Choix aléatoire de la colonne
+            rotation = (rand() % 4) * 90; // Choix aléatoire de la rotation
+            printf("Colonne choisie aléatoirement : %d\n", col);
+            printf("Rotation choisie aléatoirement : %d°\n", rotation);
+        }
+        else{
+          rotation_piece(piece, rotation); // Applique la rotation choisie
+        }
 
 
         // Si la pièce ne peut pas être placée, on arrête le jeu
