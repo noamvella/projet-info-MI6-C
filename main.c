@@ -272,7 +272,7 @@ void score_max() {
     }
 }
 
-
+// laisser dans le main.
 void Partie() {
     int tab[TAILLE][TAILLE];
     int piece[TAILLE2][TAILLE2];
