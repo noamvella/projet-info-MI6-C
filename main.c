@@ -111,12 +111,14 @@ void Partie() {
         time(&fin); // Enregistre le temps de fin
 
         temps_ecoule = difftime(fin, debut); // Calcule le temps écoulé
-        if (temps_ecoule > 30) {
+        if (temps_ecoule > 5) {
             printf("Temps ecoule !\n");
             col = rand() % TAILLE; // Choix aléatoire de la colonne
             rotation = (rand() % 4) * 90; // Choix aléatoire de la rotation
             printf("Colonne choisie aleatoirement : %d\n", col);
             printf("Rotation choisie aleatoirement : %d°\n", rotation);
+
+            rotation_piece(piece, rotation); // Applique la rotation choisie
         }
         else{
           rotation_piece(piece, rotation); // Applique la rotation choisie
