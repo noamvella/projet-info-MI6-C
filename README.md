@@ -26,9 +26,13 @@ Format des pièces :
 Les pièces sont représentées dans des fichiers .txt de 5x5 caractères contenant uniquement des 1 et 0, par exemple :
 
 00000
+
 00100
+
 01110
+
 00100
+
 00000
 
 Chaque ligne représente une ligne de la pièce. Les 1 indiquent les blocs occupés.
