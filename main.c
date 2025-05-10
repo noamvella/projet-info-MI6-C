@@ -20,8 +20,19 @@ void Partie() {
     srand(time(NULL));
     init_tab(tab);
 
-    printf("Entrez votre nom : ");
-    scanf("%s", name);
+    //Page d'accueil
+    printf("===========================================\n");
+    printf("=== Bienvenue dans le jeu Tetris en C ! ===\n");
+    printf("===========================================\n\n");
+    printf("Regles du jeu :\n");
+    printf("- Placez les pieces dans une grille de %d x %d.\n", TAILLE, TAILLE);
+    printf("- Les pieces font %d x %d cases.\n", TAILLE2, TAILLE2);
+    printf("- Remplissez les lignes pour marquer des points.\n");
+    printf("- Le jeu se termine quand vous ne pouvez plus placer de piece.\n\n");
+    printf("Pour commencer, entrez votre nom : ");
+    scanf("%49s", name);
+    printf("Bonjour %s ! Bonne chance !\n", name);
+
 
     DIR *d; // Pointeur pour le dossier
     struct dirent *dir; // Pointeur pour les fichiers
@@ -47,20 +58,20 @@ void Partie() {
     closedir(d);
 
     if (nb_pieces == 0) {
-        printf("Aucune pièce trouvée dans le dossier 'pieces'.\n");
+        printf("Aucune piece trouvee dans le dossier 'pieces'.\n");
         return;
     }
 
-    printf("%d pièces trouvées.\n", nb_pieces);
+    printf("%d pieces trouvees.\n", nb_pieces);
 
     while (!game_over) {
         if (!telecharge_piece_joueur(piece, piece_files, nb_pieces)) {
-            printf("Erreur lors du chargement de la pièce.\n");
+            printf("Erreur lors du chargement de la piece.\n");
             break;
         }
 
         affichage(tab, TAILLE);
-        printf("\nVoici la pièce à jouer :\n");
+        printf("\nVoici la piece à jouer :\n");
         affiche_piece(piece);
 
         //On va mettre un temps afin que si le joueur ne joue pas, la colonne et laa rotation soient choisies aléatoirement
@@ -101,11 +112,11 @@ void Partie() {
 
         temps_ecoule = difftime(fin, debut); // Calcule le temps écoulé
         if (temps_ecoule > 30) {
-            printf("Temps écoulé !\n");
+            printf("Temps ecoule !\n");
             col = rand() % TAILLE; // Choix aléatoire de la colonne
             rotation = (rand() % 4) * 90; // Choix aléatoire de la rotation
-            printf("Colonne choisie aléatoirement : %d\n", col);
-            printf("Rotation choisie aléatoirement : %d°\n", rotation);
+            printf("Colonne choisie aleatoirement : %d\n", col);
+            printf("Rotation choisie aleatoirement : %d°\n", rotation);
         }
         else{
           rotation_piece(piece, rotation); // Applique la rotation choisie
@@ -132,6 +143,7 @@ void Partie() {
 
     for (int i = 0; i < nb_pieces; i++) free(piece_files[i]); // Libère la mémoire allouée pour les noms de fichiers
 }
+
 
 
 int main(){
