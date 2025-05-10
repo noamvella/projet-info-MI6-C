@@ -56,7 +56,7 @@ void score_max() {
     int count = 0;
     FILE *f = fopen("scores.txt", "r"); // Ouverture du fichier en mode lecture
     if (!f) {
-        printf("Aucun score enregistré.\n");
+        printf("Aucun score enregistre.\n");
         return;
     }
 
@@ -70,7 +70,7 @@ void score_max() {
     qsort(scores, count, sizeof(Score), compare_scores);
 
     // Affiche les scores enregistrés
-    printf("\n   Scores enregistrés :\n");
+    printf("\n   Scores enregistres :\n");
     for (int i = 0; i < count; i++) {
         printf("%s : %d\n", scores[i].name, scores[i].score);
     }
