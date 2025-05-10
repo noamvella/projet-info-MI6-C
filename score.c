@@ -54,19 +54,19 @@ int compare_scores(const void *a, const void *b) {
 void score_max() {
     Score scores[MAX_SCORES];
     int count = 0;
-    FILE *f = fopen("scores.txt", "r");
+    FILE *f = fopen("scores.txt", "r"); // Ouverture du fichier en mode lecture
     if (!f) {
         printf("Aucun score enregistré.\n");
         return;
     }
 
-    // On lit tous les scores dans le fichier
+    // Enregistre les noms et les scores dans le tableau scores
     while (fscanf(f, "%s %d", scores[count].name, &scores[count].score) == 2 && count < MAX_SCORES) {
         count++;
     }
     fclose(f);
 
-    // Trie les scores par ordre décroissant
+    // Trie les scores par ordre décroissant 
     qsort(scores, count, sizeof(Score), compare_scores);
 
     // Affiche les scores enregistrés
