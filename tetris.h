@@ -5,8 +5,7 @@
 #define TAILLE2 5
 #define MAX_SCORES 10
 
-// Structure pour stocker les scores
-// et les noms des joueurs
+// Structure pour stocker les scores et les noms des joueurs
 typedef struct {
     char name[50];
     int score;
