@@ -53,7 +53,7 @@ int telecharge_piece(const char *filename, int piece[TAILLE2][TAILLE2]) {
 
 int telecharge_piece_joueur(int piece[TAILLE2][TAILLE2], char **piece_files, int nb_pieces) {
     int piece1[TAILLE2][TAILLE2];
-    printf("Choisissez une pièce parmi les suivantes :\n");
+    printf("Choisissez une piece parmi les suivantes :\n");
     for (int i = 0; i < nb_pieces; i++) {
         char path[256];
         snprintf(path, sizeof(path), "pieces/%s", piece_files[i]);
