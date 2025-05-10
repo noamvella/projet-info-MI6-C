@@ -11,7 +11,7 @@ void sauvegarde_score(const char *name, int score) {
     if (!f) {
         // Si le fichier n'existe pas, on le crée
         f = fopen("scores.txt", "a");
-        if (!f) return; // Erreur d'ouverture
+        if (!f) return; // Si erreur d'ouverture on retourne
         fprintf(f, "%s %d\n", name, score);
         fclose(f);
         return;
@@ -28,7 +28,7 @@ void sauvegarde_score(const char *name, int score) {
             // Si le joueur existe, on met à jour son score si nécessaire
             if (score > existing_score) {
                 // On revient à la position du score du joueur
-                fseek(f, pos, SEEK_SET);
+                fseek(f, pos, SEEK_SET); //revient a la position dans le fichier ou se trouvait le score du joueur
                 fprintf(f, "%s %d\n", name, score); // On écrit le meilleur score
             }
             player_found = 1;
