@@ -71,7 +71,7 @@ void Partie() {
         }
 
         affichage(tab, TAILLE);
-        printf("\nVoici la piece à jouer :\n");
+        printf("\nVoici la piece a jouer :\n");
         affiche_piece(piece);
 
         //On va mettre un temps afin que si le joueur ne joue pas, la colonne et laa rotation soient choisies aléatoirement
@@ -87,7 +87,7 @@ void Partie() {
         // On demande à l'utilisateur de choisir une colonne
         int col, rotation;
 
-        printf("Colonne (0 à %d) : ", TAILLE - 1); 
+        printf("Colonne (0 a %d) : ", TAILLE - 1); 
         if (scanf("%d", &col) != 1) break;
 
         int piece_temp[TAILLE2][TAILLE2];
