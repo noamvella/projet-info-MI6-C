@@ -80,7 +80,7 @@ void Partie() {
 
         srand(time(NULL)); // Initialiser le générateur de nombres aléatoires
 
-        printf("Tu as 30 secondes pour choisir une colonne et une rotation.\n");
+        printf("Tu as 20 secondes pour choisir une colonne et une rotation.\n");
 
         time(&debut); // Enregistre le temps de début
 
@@ -111,7 +111,7 @@ void Partie() {
         time(&fin); // Enregistre le temps de fin
 
         temps_ecoule = difftime(fin, debut); // Calcule le temps écoulé
-        if (temps_ecoule > 5) {
+        if (temps_ecoule > 20) {
             printf("Temps ecoule !\n");
             col = rand() % TAILLE; // Choix aléatoire de la colonne
             rotation = (rand() % 4) * 90; // Choix aléatoire de la rotation
